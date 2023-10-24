@@ -88,7 +88,7 @@ class World {
         trees.push(p);
         tryCount = 0;
       }
-      tryCount ++;
+      tryCount++;
     }
 
     return trees;
@@ -142,9 +142,13 @@ class World {
       bases.push(new Envelope(sup, this.buildingsWidth).poly);
     }
 
+    const eps = 0.001;
     for (let i = 0; i < bases.length - 1; i++) {
       for (let j = i + 1; j < bases.length; j++) {
-        if (bases[i].intersectsPoly(bases[j])) {
+        if (
+          bases[i].intersectsPoly(bases[j]) || 
+          bases[i].distanceToPoly(bases[j]) < this.spacing - eps
+        ) {
           bases.splice(j, 1);
           j--;
         }
