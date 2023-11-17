@@ -3,10 +3,12 @@ class Polygon {
     this.points = points;
     this.segments = [];
     for (let i = 1; i <= points.length; i++) {
-      this.segments.push(
-        new Segment(points[i - 1], points[i % points.length])
-      );
+      this.segments.push(new Segment(points[i - 1], points[i % points.length]));
     }
+  }
+
+  static load(info) {
+    return new Polygon(info.points.map((i) => new Point(i.x, i.y)));
   }
 
   static union(polys) {
@@ -46,7 +48,10 @@ class Polygon {
     for (let i = 0; i < segs1.length; i++) {
       for (let j = 0; j < segs2.length; j++) {
         const int = getIntersection(
-          segs1[i].p1, segs1[i].p2, segs2[j].p1, segs2[j].p2
+          segs1[i].p1,
+          segs1[i].p2,
+          segs2[j].p1,
+          segs2[j].p2
         );
 
         if (int && int.offset != 1 && int.offset != 0) {
@@ -102,15 +107,14 @@ class Polygon {
 
   drawSegments(ctx) {
     for (const seg of this.segments) {
-      seg.draw(ctx, { color: getRandomColor(), width: 5 })
+      seg.draw(ctx, { color: getRandomColor(), width: 5 });
     }
   }
 
-  draw(ctx, {
-    stroke = "blue",
-    lineWidth = 2,
-    fill = "rgba(0, 0, 255, 0.3)"
-  } = {}) {
+  draw(
+    ctx,
+    { stroke = "blue", lineWidth = 2, fill = "rgba(0, 0, 255, 0.3)" } = {}
+  ) {
     ctx.beginPath();
     ctx.fillStyle = fill;
     ctx.strokeStyle = stroke;
